@@ -1,11 +1,15 @@
-import createElements from './createElements.js';
+// import createElements from './createElements.js';
 
-const {
-  createHeader,
-} = createElements;
+// const {
+//   createLogo,
+// } = createElements;
 
-// Основная функция
-const renderToDo = () => {
-  // Создаем хедер страницы
-  const h3 = createHeader();
-};
+// // Основная функция
+// const renderToDo = () => {
+//   // Создаем хедер страницы
+//   createLogo();
+// };
+
+// export default {
+//   renderToDo,
+// };

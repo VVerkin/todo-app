@@ -1,3 +1,6 @@
+// import createElements from './modules/createElements.js';
+// import render from './modules/render.js';
+
 // Ф-я получает контейнер
 const getContainer = () => {
   // Получаем эл-т div
@@ -7,16 +10,29 @@ const getContainer = () => {
   // Возвращаем получившийся контейнер
   return container;
 };
-getContainer();
 
-// Ф-я создает заголовок
-const createHeader = () => {
+// Ф-я добавляет логотип в виде загловка
+const createLogo = () => {
   // Создаем в верстке эл-т h3
-  const h1 = document.createElement('h1');
+  const h3 = document.createElement('h3');
   // Добавляем содержимое в заголовок
-  h1.textContent = 'Todo App';
-  // Вставляем h3 в контейнер
-  h1.append(container);
-  return h1;
+  h3.textContent = 'Todo App';
+  // Возвращаем получившийся заголовок
+  return h3;
 };
-createHeader();
+
+// Основная функция
+const renderToDo = (container, h3) => {
+  container.append(h3);
+};
+
+{
+// Ф-я, которая инициализирует наше приложение
+  const init = () => {
+    const container = getContainer();
+    const h3 = createLogo();
+    renderToDo(container, h3);
+  };
+
+  init();
+};
