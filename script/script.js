@@ -20,6 +20,7 @@ const createLogo = () => {
   // Возвращаем получившийся заголовок
   return h3;
 };
+
 // Ф-я cоздает форму для добавления данных
 const createForm = () => {
   // Создаем форму
@@ -42,15 +43,52 @@ const createForm = () => {
   return form;
 };
 
+//Ф-я создает таблицу
+const createTable = () => {
+  const tableWrapper = document.createElement('div');
+  // Создаем обертку для таблицы
+  tableWrapper.classList.add('table-wrapper');
+  // Создаем таблицу
+  const table = document.createElement('table');
+  // Назначаем классы по bootstrap
+  table.classList.add('table', 'table-hover', 'table-bordered');
+  // Создаем thead для заголовков таблицы
+  const thead = document.createElement('thead');
+  // Вставляем верстку шапки таблицы
+  thead.insertAdjacentHTML('beforeend', `
+    <tr> 
+    <th>№</th>
+    <th>Задача</th>
+    <th>Статус</th>
+    <th>Действия</th>
+    </tr>
+    `);
+  // Создаем тело таблицы
+  const tbody = document.createElement('tbody');
+  // tbody ничего не содержит, поэтому просто вставляем в таблицу
+  table.append(thead, tbody); // Важен порядок вставки
+  // Что бы не возвращать tbody как объект, в сам элемент table добавим свойство tbody (как в контейнер)
+  table.tbody = tbody;
+  return {
+    table,
+    tableWrapper,
+  };
+};
 
 // Основная функция
-const renderToDo = (container, h3) => {
+const renderToDo = () => {
+  const container = getContainer();
+  const logo = createLogo();
   const form = createForm();
-  container.append(h3, form);
+  // Вызов функции создания таблицы
+  const {table, tableWrapper} = createTable();
+  container.append(logo, form, tableWrapper, table);
+  tableWrapper.append(table);
 
   return {
-    h3,
+    logo,
     form,
+    table,
   };
 };
 
