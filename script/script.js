@@ -75,6 +75,49 @@ const createTable = () => {
   };
 };
 
+// Ф-я создает строку на основе данных из объекта.
+// В скобках сразу проводим деструктуризацию
+const createRow = ({number, task, status}) => {
+  // Переименовываем name в firatName, т.к. в глобальной области видимости уже есть name 
+  // Создаем строку
+  const tr = document.createElement('tr');
+  // Назначасем класс contact, т.к. записываем контакты людей
+  tr.classList.add('table-light');
+  // Создаем ячейки
+  // в tdDel данных нет, есть кнопки. 
+  const tdAct = document.createElement('td');
+  // Создаем кнопки
+  // Кнопка удалить
+  const buttonDel = document.createElement('button');
+  //Появившиеся кнопки оформляем подготовленным классом
+  buttonDel.classList.add('btn', 'btn-danger');
+  // Добавляем атрибут data-phone
+  buttonDel.dataset.task = task;
+  //в ячейку tdAct вставляем кнопку
+  tdAct.append(buttonDel);
+  // Кнопка Завершить
+  const buttonDone = document.createElement('button');
+  //Появившиеся кнопки оформляем подготовленным классом
+  buttonDone.classList.add('btn', 'btn-success');
+  // Добавляем атрибут data-phone
+  buttonDone.dataset.task = task;
+  //в ячейку tdAct вставляем кнопку
+  tdAct.append(buttonDone);
+
+  // Оформляем омтальные элементы
+  const tdNumber = document.createElement('td');
+  tdNumber.textContent = number; // В качестве контента берем деструктурированные данные
+  const tdTask = document.createElement('td');
+  tdTask.textContent = task; // В качестве контента берем деструктурированные данные
+  const tdStatus = document.createElement('td');
+  tdStatus.textContent = status; // В качестве контента берем деструктурированные данные
+
+  // Вставляем td в tr
+  tr.append(tdNumber, tdTask, tdStatus, tdAct);
+  // Возвращаем получившуюся строку
+  return tr;
+};
+
 // Основная функция
 const renderToDo = () => {
   const container = getContainer();
@@ -86,10 +129,21 @@ const renderToDo = () => {
   tableWrapper.append(table);
 
   return {
+    list: table.tbody,
     logo,
     form,
     table,
   };
+};
+
+// Ф-я принимает элемент и массив с объектами
+const renderTasks = (elem, data) => {
+  // Создаем элементы перебирая массив с объектами
+  const allRow = data.map(createRow);
+  // выводим результат на страницу
+  elem.append(...allRow);
+
+  return allRow;
 };
 
 {
@@ -99,6 +153,9 @@ const renderToDo = () => {
     const title = createLogo();
     const form = createForm();
     renderToDo(container, title, form);
+
+    //В ф-ю передаем list в чистом виде после деструктуризации и data
+    const allRow = renderTasks(list, data);
   };
 
   init();
