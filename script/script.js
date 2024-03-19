@@ -118,6 +118,35 @@ const createRow = ({number, task, status}) => {
   return tr;
 };
 
+// Ф-я принимает task и list и добавляет task в list
+const addTaskPage = (task, list) => {
+  // добавляет task в list  с применением ф-и createRow, которая на основе объекта делает строку
+  list.append(createRow(task));
+};
+
+// Функция обрабатывает форму
+const formControl = (form, list) => {
+  // Вешаем событе на нажатие кнопки "Добавить" в форме
+  form.addEventListener('submit', e => {
+    // Убираем стандартную перезагрузку страницы при нажатии на кнопку "добавить"
+    e.preventDefault();
+    // Создаем FormData и передаем туда форму через e.target
+    const formData = new FormData(e.target);
+    // Создаем объект, который будет формироваться из введеных пользователем данных в формк=у
+    const newTask = Object.fromEntries(formData);
+    console.log('newTask:', newTask);
+    // Получаем значения полей формы
+    // const name = form.querySelector('#name').value;
+    // const surname = form.querySelector('#surname').value;
+    // const phone = form.querySelector('#phone').value;
+
+    // Вызываем функцию добавления контакта в таблицу на странице
+    addTaskPage(newTask, list);
+
+    // setStorage('tasks', newTask);
+  });
+};
+
 // Основная функция
 const renderToDo = () => {
   const container = getContainer();
@@ -148,7 +177,7 @@ const renderTasks = (elem, data) => {
 
 {
 // Ф-я, которая инициализирует наше приложение
-  const init = () => {
+  const init = (list, data) => {
     const container = getContainer();
     const title = createLogo();
     const form = createForm();
@@ -156,6 +185,7 @@ const renderTasks = (elem, data) => {
 
     //В ф-ю передаем list в чистом виде после деструктуризации и data
     const allRow = renderTasks(list, data);
+    formControl(form, list);
   };
 
   init();
