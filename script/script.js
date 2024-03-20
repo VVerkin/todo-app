@@ -1,6 +1,6 @@
 // import createElements from './modules/createElements.js';
 // import render from './modules/render.js';
-
+const data = [];
 // Ф-я получает контейнер
 const getContainer = () => {
   // Получаем эл-т div
@@ -43,7 +43,7 @@ const createForm = () => {
   return form;
 };
 
-//Ф-я создает таблицу
+// Ф-я создает таблицу
 const createTable = () => {
   const tableWrapper = document.createElement('div');
   // Создаем обертку для таблицы
@@ -67,7 +67,8 @@ const createTable = () => {
   const tbody = document.createElement('tbody');
   // tbody ничего не содержит, поэтому просто вставляем в таблицу
   table.append(thead, tbody); // Важен порядок вставки
-  // Что бы не возвращать tbody как объект, в сам элемент table добавим свойство tbody (как в контейнер)
+  // Что бы не возвращать tbody как объект,
+  // в сам элемент table добавим свойство tbody (как в контейнер)
   table.tbody = tbody;
   return {
     table,
@@ -77,8 +78,7 @@ const createTable = () => {
 
 // Ф-я создает строку на основе данных из объекта.
 // В скобках сразу проводим деструктуризацию
-const createRow = ({number, task, status}) => {
-  // Переименовываем name в firatName, т.к. в глобальной области видимости уже есть name 
+const createRow = ({number, task, status}) => { 
   // Создаем строку
   const tr = document.createElement('tr');
   // Назначасем класс contact, т.к. записываем контакты людей
@@ -88,29 +88,32 @@ const createRow = ({number, task, status}) => {
   const tdAct = document.createElement('td');
   // Создаем кнопки
   // Кнопка удалить
-  const buttonDel = document.createElement('button');
-  //Появившиеся кнопки оформляем подготовленным классом
-  buttonDel.classList.add('btn', 'btn-danger');
+  const btnDel = document.createElement('button');
+  // Появившиеся кнопки оформляем подготовленным классом
+  btnDel.classList.add('btn', 'btn-danger');
   // Добавляем атрибут data-phone
-  buttonDel.dataset.task = task;
-  //в ячейку tdAct вставляем кнопку
-  tdAct.append(buttonDel);
+  // btnDel.dataset.task = task;
+  // в ячейку tdAct вставляем кнопку
+  tdAct.append(btnDel);
   // Кнопка Завершить
-  const buttonDone = document.createElement('button');
-  //Появившиеся кнопки оформляем подготовленным классом
-  buttonDone.classList.add('btn', 'btn-success');
+  const btnDone = document.createElement('button');
+  // Появившиеся кнопки оформляем подготовленным классом
+  btnDone.classList.add('btn', 'btn-success');
   // Добавляем атрибут data-phone
-  buttonDone.dataset.task = task;
-  //в ячейку tdAct вставляем кнопку
-  tdAct.append(buttonDone);
+  // btnDone.dataset.task = task;
+  // в ячейку tdAct вставляем кнопку
+  tdAct.append(btnDone);
 
   // Оформляем омтальные элементы
   const tdNumber = document.createElement('td');
-  tdNumber.textContent = number; // В качестве контента берем деструктурированные данные
+  // В качестве контента берем деструктурированные данные
+  tdNumber.textContent = number;
   const tdTask = document.createElement('td');
-  tdTask.textContent = task; // В качестве контента берем деструктурированные данные
+  // В качестве контента берем деструктурированные данные
+  tdTask.textContent = task;
   const tdStatus = document.createElement('td');
-  tdStatus.textContent = status; // В качестве контента берем деструктурированные данные
+  // В качестве контента берем деструктурированные данные
+  tdStatus.textContent = status;
 
   // Вставляем td в tr
   tr.append(tdNumber, tdTask, tdStatus, tdAct);
@@ -118,14 +121,18 @@ const createRow = ({number, task, status}) => {
   return tr;
 };
 
-// Ф-я принимает task и list и добавляет task в list
-const addTaskPage = (task, list) => {
-  // добавляет task в list  с применением ф-и createRow, которая на основе объекта делает строку
-  list.append(createRow(task));
+// Ф-я добавляет элемент в таблицу
+const addTaskTable = (item, tbody) => {
+  tbody.append(createRow(item));
+};
+
+const addTaskData = item => {
+  data.push(item);
+  console.log('data:', data);
 };
 
 // Функция обрабатывает форму
-const formControl = (form, list) => {
+const formControl = (form, tbody) => {
   // Вешаем событе на нажатие кнопки "Добавить" в форме
   form.addEventListener('submit', e => {
     // Убираем стандартную перезагрузку страницы при нажатии на кнопку "добавить"
@@ -135,17 +142,32 @@ const formControl = (form, list) => {
     // Создаем объект, который будет формироваться из введеных пользователем данных в формк=у
     const newTask = Object.fromEntries(formData);
     console.log('newTask:', newTask);
-    // Получаем значения полей формы
-    // const name = form.querySelector('#name').value;
-    // const surname = form.querySelector('#surname').value;
-    // const phone = form.querySelector('#phone').value;
 
     // Вызываем функцию добавления контакта в таблицу на странице
-    addTaskPage(newTask, list);
-
+    addTaskTable(newTask, tbody);
+    addTaskData(newTask);
+    // Очищаем форму после нажатия кнопки добавить товар
+    form.reset();
     // setStorage('tasks', newTask);
   });
 };
+
+  // Ф-я при нажатии на кнопку "Удалить" показывает крестики, при нажатии на которые удаляется строка
+  const deleteTask = (btnDel, tbody) => {
+    // С помощью делегирования m,eltv кликать по list - это вся наша область таблицы
+    tbody.addEventListener('click', e => {
+      const target = e.target // Назначаем переменную, что бы дальне не писать event.target
+      // contains используют если кнопка в единственном виде без содержимого 
+      // closest используют когда внутри элемента есть еще элемент. Например, внутри кнопки svg
+      if (target.closest('.btn-danger')) {
+      // находим родителя у event.target и удаляем его
+      // из localstorage
+        // removeStorage(target.dataset.phone);
+        // из таблицы
+        target.closest('.table-light').remove();
+      }
+    });
+  };
 
 // Основная функция
 const renderToDo = () => {
@@ -166,27 +188,24 @@ const renderToDo = () => {
 };
 
 // Ф-я принимает элемент и массив с объектами
-const renderTasks = (elem, data) => {
+const renderTasks = (arr) => {
   // Создаем элементы перебирая массив с объектами
-  const allRow = data.map(createRow);
+  const allRow = arr.map(createRow);
   // выводим результат на страницу
-  elem.append(...allRow);
-
-  return allRow;
+  allRow.forEach(tr => tbody.append(tr));
 };
 
-{
+
 // Ф-я, которая инициализирует наше приложение
-  const init = (list, data) => {
+  const init = (tbody) => {
     const container = getContainer();
     const title = createLogo();
     const form = createForm();
     renderToDo(container, title, form);
 
     //В ф-ю передаем list в чистом виде после деструктуризации и data
-    const allRow = renderTasks(list, data);
-    formControl(form, list);
+    renderTasks(data);
+    formControl(form, tbody);
   };
 
   init();
-}
