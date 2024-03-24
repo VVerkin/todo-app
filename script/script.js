@@ -1,6 +1,18 @@
 'use strict';
 
 {
+  const data = [
+    {
+      number: 1,
+      task: 1,
+      stat: 1,
+    },
+    {
+      number: 2,
+      task: 2,
+      stat: 2,
+    },
+  ];
   // Ф-я принимает заголовок и добавляет его в качестве заголовка
   const createLogo = title => {
     // Создаем в верстке эл-т h3
@@ -51,6 +63,23 @@
       <input type="text" class="form-control" placeholder="ввести задачу">
     </label>
       `);
+    // Добавляем кнопки
+    const buttonGroup = createButtonsGroup([
+      {
+        className: 'btn btn-primary me-3',
+        type: 'button',
+        text: 'Добавить',
+      },
+      {
+        className: 'btn btn-warning',
+        type: 'button',
+        text: 'Очистить',
+      },
+
+    ]);
+    // Вставляем в форму сразу деструктурированные кнопки без обертки
+    form.append(...buttonGroup.btns);
+
     return form;
   };
 
@@ -87,38 +116,72 @@
     return {
       tableWrapper,
       table,
+      tbody,
     };
   };
 
+
+  const renderToDo = (app, title) => {
+    // В приложение вставляем заголовок
+    const logo = createLogo(title);
+    const form = createForm();
+    const table = createTable();
+    // Добавляем классы
+    app.classList.add('vh-100', 'w-100','d-flex', 'align-items-center', 'justify-content-center', 'flex-column');
+    // Вставляем на страницу заголовок, формуб таблицу
+    app.append(logo, form, table.tableWrapper);
+
+    return {
+      list: table.tbody,
+    };
+  };
+
+  const createRow = ({number, task, stat}) => {
+    const tr = document.createElement('tr');
+    tr.classList.add('table-light');
+
+    const buttonDel = document.createElement('button');
+    buttonDel.classList.add('btn', 'btn-danger');
+
+    const buttonDone = document.createElement('button');
+    buttonDone.classList.add('btn', 'btn-success');
+
+    const tdNumer = document.createElement('td');
+    tdNumer.textContent = number;
+
+    const tdTask = document.createElement('td');
+    tdTask.classList.add('task');
+    tdTask.textContent = task;
+
+    const tdStat = document.createElement('td');
+    tdStat.textContent = stat;
+
+    const tdAction = document.createElement('td');
+    tdAction.append(buttonDel, buttonDone);
+
+    tr.append(tdNumer, tdTask, tdStat, tdAction);
+
+    return tr;
+  };
+
+
+  const renderTasks = (elem, data) => {
+    const allRow = data.map(createRow);
+    elem.append(...allRow);
+  };
 
   // Ф-я принимает селектор приложения с html страницы и заголовок
   const init = (selectorApp, title) => {
     // Получаем элемент по селектору
     const app = document.querySelector(selectorApp);
-    // Добавляем классы
-    app.classList.add('vh-100', 'w-100','d-flex', 'align-items-center', 'justify-content-center', 'flex-column');
-    console.log('app:', app);
+    // Вызываем renderToDo и передаем туда сразу app
+    const toDo = renderToDo(app, title);
+    console.log('toDo', toDo);
+    // Деструктуризация list, что бы передавать отдельно, а не toDo.list
+    const {list} = toDo;
+    renderTasks(list, data);
 
-    // В приложение вставляем заголовок
-    const logo = createLogo(title);
-    const form = createForm();
-    const table = createTable();
-    const buttonGroup = createButtonsGroup([
-      {
-        className: 'btn btn-primary me-3',
-        type: 'button',
-        text: 'Добавить',
-      },
-      {
-        className: 'btn btn-warning',
-        type: 'button',
-        text: 'Очистить',
-      },
-
-    ]);
-    // Вставляем на страницу заголовок, формуб таблицу,
-    form.append(buttonGroup.btnWrapper);
-    app.append(logo, form, table.tableWrapper);
+    // Функционал
   };
 
   window.toDoInit = init;
