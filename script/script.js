@@ -64,7 +64,7 @@
     </label>
       `);
     // Добавляем кнопки
-    const buttonGroup = createButtonsGroup([
+    const formButton = createButtonsGroup([
       {
         className: 'btn btn-primary me-3',
         type: 'button',
@@ -78,7 +78,7 @@
 
     ]);
     // Вставляем в форму сразу деструктурированные кнопки без обертки
-    form.append(...buttonGroup.btns);
+    form.append(...formButton.btns);
 
     return form;
   };
@@ -140,12 +140,6 @@
     const tr = document.createElement('tr');
     tr.classList.add('table-light');
 
-    const buttonDel = document.createElement('button');
-    buttonDel.classList.add('btn', 'btn-danger');
-
-    const buttonDone = document.createElement('button');
-    buttonDone.classList.add('btn', 'btn-success');
-
     const tdNumer = document.createElement('td');
     tdNumer.textContent = number;
 
@@ -157,7 +151,22 @@
     tdStat.textContent = stat;
 
     const tdAction = document.createElement('td');
-    tdAction.append(buttonDel, buttonDone);
+    // Добавляем кнопки
+    const rowButton = createButtonsGroup([
+      {
+        className: 'btn btn-danger me-3',
+        type: 'button',
+        text: 'Удалить',
+      },
+      {
+        className: 'btn btn-success',
+        type: 'button',
+        text: 'Завершить',
+      },
+
+    ]);
+
+    tdAction.append(...rowButton.btns);
 
     tr.append(tdNumer, tdTask, tdStat, tdAction);
 
@@ -168,6 +177,7 @@
   const renderTasks = (elem, data) => {
     const allRow = data.map(createRow);
     elem.append(...allRow);
+    return allRow;
   };
 
   // Ф-я принимает селектор приложения с html страницы и заголовок
