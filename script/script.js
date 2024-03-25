@@ -3,12 +3,12 @@
 {
   const data = [
     {
-      number: 1,
+      id: 1,
       task: 1,
       stat: 1,
     },
     {
-      number: 2,
+      id: 2,
       task: 2,
       stat: 2,
     },
@@ -136,12 +136,13 @@
     };
   };
 
-  const createRow = ({number, task, stat}) => {
+  const createRow = ({id, task, stat}) => {
     const tr = document.createElement('tr');
     tr.classList.add('table-light');
 
-    const tdNumer = document.createElement('td');
-    tdNumer.textContent = number;
+    const tdId = document.createElement('td');
+    tdId.classList.add('task_id');
+    tdId.textContent = id;
 
     const tdTask = document.createElement('td');
     tdTask.classList.add('task');
@@ -168,16 +169,42 @@
 
     tdAction.append(...rowButton.btns);
 
-    tr.append(tdNumer, tdTask, tdStat, tdAction);
+    tr.append(tdId, tdTask, tdStat, tdAction);
 
     return tr;
   };
-
 
   const renderTasks = (elem, data) => {
     const allRow = data.map(createRow);
     elem.append(...allRow);
     return allRow;
+  };
+
+
+  // Ф-я при помощи делегирования удаляет строкку при нажатии
+  // на иконку "удалить"и эл-т из массива
+  const delTask = (list) => {
+    // Вещшаем обработчик события на tbody
+    list.addEventListener('click', e => {
+      // Получаем эл-т на котором произошел клик
+      const target = e.target;
+      // Проверяем, является ли ближайший родительский эл-т с классом 
+      // "cms__table-btn-del" кнопкой удаления товара
+      if (target.closest('.btn-danger')) {
+        // В переменную получаем строку таблицы
+        const tr = target.closest('.table-light');
+        // Получаем содержимое элемента "id" из строки
+        const id = parseInt(tr.querySelector('.task_id').textContent);
+        // Находим индекс объекта в массиве "goods",
+        // у которого значение свойства "id" совпадает с id товара
+        // и удаляем этот объект из массива с помощью метода "splice"
+        data.splice(data.findIndex((item) => item.id === id), 1);
+        // Удаляем строку таблицы из DOM
+        tr.remove();
+        // Выводим в консоль получившийся массив после удаления строк
+        console.log(data);
+      }
+    });
   };
 
   // Ф-я принимает селектор приложения с html страницы и заголовок
@@ -192,6 +219,7 @@
     renderTasks(list, data);
 
     // Функционал
+    delTask(list);
   };
 
   window.toDoInit = init;
