@@ -4,15 +4,20 @@
   const data = [
     {
       id: 1,
-      task: 1,
-      stat: 1,
+      task: 'Купить слона',
+      stat: 'В процессе',
     },
     {
       id: 2,
-      task: 2,
-      stat: 2,
+      task: 'Помыть кота',
+      stat: 'В процессе',
     },
   ];
+
+  const addTaskData = task => {
+    data.push(task);
+    console.log('data', data);
+  };
   // Ф-я принимает заголовок и добавляет его в качестве заголовка
   const createLogo = title => {
     // Создаем в верстке эл-т h3
@@ -67,12 +72,12 @@
     const formButton = createButtonsGroup([
       {
         className: 'btn btn-primary me-3',
-        type: 'button',
+        type: 'submit',
         text: 'Добавить',
       },
       {
         className: 'btn btn-warning',
-        type: 'button',
+        type: 'reset',
         text: 'Очистить',
       },
 
@@ -133,6 +138,7 @@
 
     return {
       list: table.tbody,
+      form,
     };
   };
 
@@ -140,36 +146,50 @@
     const tr = document.createElement('tr');
     tr.classList.add('table-light');
 
-    const tdId = document.createElement('td');
-    tdId.classList.add('task_id');
-    tdId.textContent = id;
+    tr.insertAdjacentHTML('afterbegin', `
+    <td class='task-id'>${id}</td>
+    <td class='task'>${task}</td>
+    <td class='stat'>${stat}</td>
+    <td class='btns'>
+        <button class="btn btn-danger me-3">
+        Удалить
+        </button>
+        <button class="btn btn-success">
+        Завершить  
+        </button>
+    </td>
+    `);
 
-    const tdTask = document.createElement('td');
-    tdTask.classList.add('task');
-    tdTask.textContent = task;
+    // const tdId = document.createElement('td');
+    // tdId.classList.add('task_id');
+    // tdId.textContent = id;
 
-    const tdStat = document.createElement('td');
-    tdStat.textContent = stat;
+    // const tdTask = document.createElement('td');
+    // tdTask.classList.add('task');
+    // tdTask.textContent = task;
 
-    const tdAction = document.createElement('td');
-    // Добавляем кнопки
-    const rowButton = createButtonsGroup([
-      {
-        className: 'btn btn-danger me-3',
-        type: 'button',
-        text: 'Удалить',
-      },
-      {
-        className: 'btn btn-success',
-        type: 'button',
-        text: 'Завершить',
-      },
+    // const tdStat = document.createElement('td');
+    // tdStat.textContent = stat;
 
-    ]);
+    // const tdAction = document.createElement('td');
+    // // Добавляем кнопки
+    // const rowButton = createButtonsGroup([
+    //   {
+    //     className: 'btn btn-danger me-3',
+    //     type: 'button',
+    //     text: 'Удалить',
+    //   },
+    //   {
+    //     className: 'btn btn-success',
+    //     type: 'button',
+    //     text: 'Завершить',
+    //   },
 
-    tdAction.append(...rowButton.btns);
+    // ]);
 
-    tr.append(tdId, tdTask, tdStat, tdAction);
+    // tdAction.append(...rowButton.btns);
+
+    // tr.append(tdId, tdTask, tdStat, tdAction);
 
     return tr;
   };
@@ -180,7 +200,29 @@
     return allRow;
   };
 
+  // Ф-я принимает contact и list и добавляет contact в list
+  const addTaskPage = (task, list) => {
+  // добавляет contact в list  с применением ф-и createRow, которая на основе объекта делает строку
+    list.append(createRow(task));
+};
 
+  const formControl = (form, list) => {
+    // Получаем форму
+    form.addEventListener('submit', e => {
+      // Убираем стандартное поведение формы
+      e.preventDefault();
+      // Реализуем отправку данных
+      // Создаем formData и передаем туда форму через e.target
+      const formData = new FormData(e.target);
+      // Создаем объект на основе данных, введенных в поля формы
+      const newTask = Object.fromEntries(formData);
+      console.log('newTask:', newTask);
+      addTaskData(newTask);
+      addTaskPage(newTask, list);
+      form.reset();
+    });
+  };
+  
   // Ф-я при помощи делегирования удаляет строкку при нажатии
   // на иконку "удалить"и эл-т из массива
   const delTask = (list) => {
@@ -194,7 +236,7 @@
         // В переменную получаем строку таблицы
         const tr = target.closest('.table-light');
         // Получаем содержимое элемента "id" из строки
-        const id = parseInt(tr.querySelector('.task_id').textContent);
+        const id = parseInt(tr.querySelector('.task-id').textContent);
         // Находим индекс объекта в массиве "goods",
         // у которого значение свойства "id" совпадает с id товара
         // и удаляем этот объект из массива с помощью метода "splice"
@@ -211,15 +253,15 @@
   const init = (selectorApp, title) => {
     // Получаем элемент по селектору
     const app = document.querySelector(selectorApp);
-    // Вызываем renderToDo и передаем туда сразу app
-    const toDo = renderToDo(app, title);
-    console.log('toDo', toDo);
     // Деструктуризация list, что бы передавать отдельно, а не toDo.list
-    const {list} = toDo;
+    const {
+      list,
+      form,
+    } = renderToDo(app, title);
     renderTasks(list, data);
-
     // Функционал
     delTask(list);
+    formControl(form, list);
   };
 
   window.toDoInit = init;
