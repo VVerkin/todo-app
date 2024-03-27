@@ -5,17 +5,15 @@
     {
       id: 1,
       task: 'Купить слона',
-      stat: 'В процессе',
     },
     {
       id: 2,
       task: 'Помыть кота',
-      stat: 'В процессе',
     },
   ];
 
-  const addTaskData = task => {
-    data.push(task);
+  const addItemData = item => {
+    data.push(item);
     console.log('data', data);
   };
   // Ф-я принимает заголовок и добавляет его в качестве заголовка
@@ -27,6 +25,7 @@
     // Возвращаем получившийся заголовок
     return h3;
   };
+
   // Ф-я принимает параметры и по ним кнопки
   const createButtonsGroup = params => {
     // Создаем обертку для кнопок
@@ -65,7 +64,7 @@
     // Форма статичная, поэтому просто вставляем верстку
     form.insertAdjacentHTML('beforeend', `
     <label class="form-group me-3 mb-0">
-      <input type="text" class="form-control" placeholder="ввести задачу">
+      <input type="text" name="task" class="form-control" placeholder="ввести задачу" required>
     </label>
       `);
     // Добавляем кнопки
@@ -142,54 +141,53 @@
     };
   };
 
-  const createRow = ({id, task, stat}) => {
+  const createRow = ({id, task}) => {
     const tr = document.createElement('tr');
     tr.classList.add('table-light');
 
-    tr.insertAdjacentHTML('afterbegin', `
-    <td class='task-id'>${id}</td>
-    <td class='task'>${task}</td>
-    <td class='stat'>${stat}</td>
-    <td class='btns'>
-        <button class="btn btn-danger me-3">
-        Удалить
-        </button>
-        <button class="btn btn-success">
-        Завершить  
-        </button>
-    </td>
-    `);
+    // tr.insertAdjacentHTML('afterbegin', `
+    // <td class='task-id'>${id}</td>
+    // <td class='task'>${task}</td>
+    // <td class='stat'>${stat}</td>
+    // <td class='btns'>
+    //     <button class="btn btn-danger me-3">
+    //     Удалить
+    //     </button>
+    //     <button class="btn btn-success">
+    //     Завершить  
+    //     </button>
+    // </td>
+    // `);
 
-    // const tdId = document.createElement('td');
-    // tdId.classList.add('task_id');
-    // tdId.textContent = id;
+    const tdId = document.createElement('td');
+    tdId.textContent = id;
 
-    // const tdTask = document.createElement('td');
-    // tdTask.classList.add('task');
-    // tdTask.textContent = task;
+    const tdTask = document.createElement('td');
+    tdTask.classList.add('task');
+    tdTask.textContent = task;
 
-    // const tdStat = document.createElement('td');
-    // tdStat.textContent = stat;
+    const tdStat = document.createElement('td');
+    tdStat.textContent = 'В процессе';
 
-    // const tdAction = document.createElement('td');
-    // // Добавляем кнопки
-    // const rowButton = createButtonsGroup([
-    //   {
-    //     className: 'btn btn-danger me-3',
-    //     type: 'button',
-    //     text: 'Удалить',
-    //   },
-    //   {
-    //     className: 'btn btn-success',
-    //     type: 'button',
-    //     text: 'Завершить',
-    //   },
+    const tdAction = document.createElement('td');
+    // Добавляем кнопки
+    const rowButton = createButtonsGroup([
+      {
+        className: 'btn btn-danger me-3',
+        type: 'button',
+        text: 'Удалить',
+      },
+      {
+        className: 'btn btn-success',
+        type: 'button',
+        text: 'Завершить',
+      },
 
-    // ]);
+    ]);
 
-    // tdAction.append(...rowButton.btns);
+    tdAction.append(...rowButton.btns);
 
-    // tr.append(tdId, tdTask, tdStat, tdAction);
+    tr.append(tdId, tdTask, tdStat, tdAction);
 
     return tr;
   };
@@ -201,9 +199,9 @@
   };
 
   // Ф-я принимает contact и list и добавляет contact в list
-  const addTaskPage = (task, list) => {
+  const addItemTable = (item, list) => {
   // добавляет contact в list  с применением ф-и createRow, которая на основе объекта делает строку
-    list.append(createRow(task));
+    list.append(createRow(item));
 };
 
   const formControl = (form, list) => {
@@ -217,8 +215,8 @@
       // Создаем объект на основе данных, введенных в поля формы
       const newTask = Object.fromEntries(formData);
       console.log('newTask:', newTask);
-      addTaskData(newTask);
-      addTaskPage(newTask, list);
+      addItemData(newTask);
+      addItemTable(newTask, list);
       form.reset();
     });
   };
