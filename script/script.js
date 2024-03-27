@@ -160,6 +160,7 @@
     // `);
 
     const tdId = document.createElement('td');
+    tdId.classList.add('task-id');
     tdId.textContent = id;
 
     const tdTask = document.createElement('td');
