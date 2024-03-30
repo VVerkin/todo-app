@@ -3,12 +3,8 @@
 {
   const data = [
     {
-      id: 1,
+      index: 0,
       task: 'Купить слона',
-    },
-    {
-      id: 2,
-      task: 'Помыть кота',
     },
   ];
 
@@ -141,7 +137,7 @@
     };
   };
 
-  const createRow = ({id, task}) => {
+  const createRow = ({index, task}) => {
     const tr = document.createElement('tr');
     tr.classList.add('table-light');
 
@@ -158,17 +154,16 @@
     //     </button>
     // </td>
     // `);
-
-    const tdId = document.createElement('td');
-    tdId.classList.add('task-id');
-    tdId.textContent = id;
-
+    const tdIndex = document.createElement('td');
+    tdIndex.textContent = index;
+    
     const tdTask = document.createElement('td');
     tdTask.classList.add('task');
     tdTask.textContent = task;
+    
 
-    const tdStat = document.createElement('td');
-    tdStat.textContent = 'В процессе';
+    const tdStatus = document.createElement('td');
+    tdStatus.textContent = 'В процессе';
 
     const tdAction = document.createElement('td');
     // Добавляем кнопки
@@ -188,7 +183,7 @@
 
     tdAction.append(...rowButton.btns);
 
-    tr.append(tdId, tdTask, tdStat, tdAction);
+    tr.append(tdIndex, tdTask, tdStatus, tdAction);
 
     return tr;
   };
@@ -197,7 +192,7 @@
     const allRow = data.map(createRow);
     elem.append(...allRow);
     return allRow;
-  };
+};
 
   // Ф-я принимает contact и list и добавляет contact в list
   const addItemTable = (item, list) => {
@@ -231,19 +226,26 @@
       const target = e.target;
       // Проверяем, является ли ближайший родительский эл-т с классом 
       // "cms__table-btn-del" кнопкой удаления товара
+      // В переменную получаем строку таблицы
+      const tr = target.closest('tr');
+
       if (target.closest('.btn-danger')) {
-        // В переменную получаем строку таблицы
-        const tr = target.closest('.table-light');
+        const task = parseInt(tr.querySelector('.task').textContent);
         // Получаем содержимое элемента "id" из строки
-        const id = parseInt(tr.querySelector('.task-id').textContent);
         // Находим индекс объекта в массиве "goods",
         // у которого значение свойства "id" совпадает с id товара
         // и удаляем этот объект из массива с помощью метода "splice"
-        data.splice(data.findIndex((item) => item.id === id), 1);
+        data.splice(data.findIndex((item) => item.task === task), 1);
         // Удаляем строку таблицы из DOM
         tr.remove();
         // Выводим в консоль получившийся массив после удаления строк
         console.log(data);
+      }
+      if (target.closest('.btn-success')) {
+        tr.classList.remove('table-light');
+        tr.classList.add('table-success');
+        const taskCell = tr.querySelector('.task');
+        taskCell.style.textDecoration = 'line-through';
       }
     });
   };
