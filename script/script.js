@@ -1,4 +1,31 @@
 'use strict';
+/*
+
+const getStorage = (key) => {
+  // Запрос данных из localStore по ключу и распарсивание полученного объекта
+  const localData = JSON.parse(localStorage.getItem(key));
+  // Условие, при котором возвращаются данне, а если их нет - пустой массив
+  return localData || [];
+};
+console.log(getStorage());
+  // Ф-я получает ключ и объект в виде аргументов и дописывает данные в localStorage
+
+const setStorage = (key, obj) => {
+  // Вызываем ф-ю, которая получает данные из localStorage и возвращает их.
+  const newData = getStorage(key);
+  // Добавляем данные (объект) в массив
+  newData.push(obj);
+  // Отправляем данные в localStorage
+  localStorage.setItem('contacts', JSON.stringify(newData));
+};
+
+  // removeStorage получает в виде аргумента номер телефона, и удаляет контакт из localStorage
+const removeStorage = (task) => {
+  const existingData = getStorage('tasks');
+  const updatedData = existingData.filter(task => data.task !== task);
+  localStorage.setItem('contacts', JSON.stringify(updatedData));
+};
+*/
 
 {
   const data = [
@@ -136,7 +163,7 @@
     };
   };
 
-  const createRow = ({task}, index) => {
+  const createRow = ({task}) => {
     const tr = document.createElement('tr');
     tr.classList.add('table-light');
 
@@ -221,6 +248,7 @@
       addItemData(newTask);
       addItemTable(newTask, list);
       form.reset();
+      setStorage('tasks', newTask);
     });
   };
   
@@ -237,12 +265,14 @@
       const tr = target.closest('tr');
 
       if (target.closest('.btn-danger')) {
-        const task = parseInt(tr.querySelector('.task').textContent);
+        // const task = parseInt(tr.querySelector('.task').textContent);
         // Получаем содержимое элемента "id" из строки
         // Находим индекс объекта в массиве "goods",
         // у которого значение свойства "id" совпадает с id товара
         // и удаляем этот объект из массива с помощью метода "splice"
-        data.splice(data.findIndex((item) => item.task === task), 1);
+        // data.splice(data.findIndex((item) => item.task === task), 1);
+            // из localstorage
+        removeStorage(target.dataset.removeTask);
         // Удаляем строку таблицы из DOM
         tr.remove();
         // Выводим в консоль получившийся массив после удаления строк
