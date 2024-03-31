@@ -3,7 +3,6 @@
 {
   const data = [
     {
-      index: 0,
       task: 'Купить слона',
     },
   ];
@@ -137,7 +136,7 @@
     };
   };
 
-  const createRow = ({index, task}) => {
+  const createRow = ({task}, index) => {
     const tr = document.createElement('tr');
     tr.classList.add('table-light');
 
@@ -155,7 +154,7 @@
     // </td>
     // `);
     const tdIndex = document.createElement('td');
-    tdIndex.textContent = index;
+    tdIndex.textContent = data.length;
     
     const tdTask = document.createElement('td');
     tdTask.classList.add('task');
@@ -163,6 +162,7 @@
     
 
     const tdStatus = document.createElement('td');
+    tdStatus.classList.add('status');
     tdStatus.textContent = 'В процессе';
 
     const tdAction = document.createElement('td');
@@ -194,11 +194,18 @@
     return allRow;
 };
 
+  const updateRowNumbers = () => {
+    const rows = document.querySelectorAll('tbody tr');
+    rows.forEach((row, index) => {
+      row.querySelector('td:first-child').textContent = index + 1;
+    });
+  };
+
   // Ф-я принимает contact и list и добавляет contact в list
   const addItemTable = (item, list) => {
   // добавляет contact в list  с применением ф-и createRow, которая на основе объекта делает строку
     list.append(createRow(item));
-};
+  };
 
   const formControl = (form, list) => {
     // Получаем форму
@@ -219,7 +226,7 @@
   
   // Ф-я при помощи делегирования удаляет строкку при нажатии
   // на иконку "удалить"и эл-т из массива
-  const delTask = (list) => {
+  const taskControl = (list) => {
     // Вещшаем обработчик события на tbody
     list.addEventListener('click', e => {
       // Получаем эл-т на котором произошел клик
@@ -239,13 +246,16 @@
         // Удаляем строку таблицы из DOM
         tr.remove();
         // Выводим в консоль получившийся массив после удаления строк
+        updateRowNumbers();
         console.log(data);
       }
       if (target.closest('.btn-success')) {
         tr.classList.remove('table-light');
         tr.classList.add('table-success');
-        const taskCell = tr.querySelector('.task');
-        taskCell.style.textDecoration = 'line-through';
+        const tdTask = tr.querySelector('.task');
+        tdTask.style.textDecoration = 'line-through';
+        const tdStatus = tr.querySelector('.status');
+        tdStatus.textContent = 'Выполнена';
       }
     });
   };
@@ -261,7 +271,7 @@
     } = renderToDo(app, title);
     renderTasks(list, data);
     // Функционал
-    delTask(list);
+    taskControl(list);
     formControl(form, list);
   };
 
