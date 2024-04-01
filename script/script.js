@@ -1,5 +1,5 @@
 'use strict';
-/*
+
 
 const getStorage = (key) => {
   // Запрос данных из localStore по ключу и распарсивание полученного объекта
@@ -16,28 +16,25 @@ const setStorage = (key, obj) => {
   // Добавляем данные (объект) в массив
   newData.push(obj);
   // Отправляем данные в localStorage
-  localStorage.setItem('contacts', JSON.stringify(newData));
+  localStorage.setItem('tasks', JSON.stringify(newData));
 };
 
-  // removeStorage получает в виде аргумента номер телефона, и удаляет контакт из localStorage
-const removeStorage = (task) => {
-  const existingData = getStorage('tasks');
-  const updatedData = existingData.filter(task => data.task !== task);
-  localStorage.setItem('contacts', JSON.stringify(updatedData));
+const removeStorage = (key, task) => {
+  const existingData = getStorage(key);
+  const updatedData = existingData.filter(item => item.task !== task);
+  localStorage.setItem(key, JSON.stringify(updatedData));
 };
-*/
+
 
 {
-  const data = [
-    {
-      task: 'Купить слона',
-    },
-  ];
+  // const data = getStorage('tasks');
+  const data = [];
 
   const addItemData = item => {
     data.push(item);
     console.log('data', data);
   };
+
   // Ф-я принимает заголовок и добавляет его в качестве заголовка
   const createLogo = title => {
     // Создаем в верстке эл-т h3
@@ -265,14 +262,14 @@ const removeStorage = (task) => {
       const tr = target.closest('tr');
 
       if (target.closest('.btn-danger')) {
-        // const task = parseInt(tr.querySelector('.task').textContent);
+        const task = target.closest('tr').querySelector('.task').textContent;
         // Получаем содержимое элемента "id" из строки
         // Находим индекс объекта в массиве "goods",
         // у которого значение свойства "id" совпадает с id товара
         // и удаляем этот объект из массива с помощью метода "splice"
         // data.splice(data.findIndex((item) => item.task === task), 1);
-            // из localstorage
-        removeStorage(target.dataset.removeTask);
+        // из localstorage
+        removeStorage('tasks', task);
         // Удаляем строку таблицы из DOM
         tr.remove();
         // Выводим в консоль получившийся массив после удаления строк
@@ -295,6 +292,7 @@ const removeStorage = (task) => {
     // Получаем элемент по селектору
     const app = document.querySelector(selectorApp);
     // Деструктуризация list, что бы передавать отдельно, а не toDo.list
+    const data = getStorage('tasks');
     const {
       list,
       form,
