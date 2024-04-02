@@ -229,7 +229,6 @@ const removeStorage = (key, task) => {
   const addItemTable = (item, list) => {
   // добавляет contact в list  с применением ф-и createRow, которая на основе объекта делает строку
     list.append(createRow(item));
-    updateRowNumbers();
   };
 
   const formControl = (form, list) => {
@@ -302,6 +301,7 @@ const removeStorage = (key, task) => {
     // Функционал
     taskControl(list);
     formControl(form, list);
+    updateRowNumbers();
   };
 
   window.toDoInit = init;
