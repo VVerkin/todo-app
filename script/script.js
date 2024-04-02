@@ -283,6 +283,16 @@ const removeStorage = (key, task) => {
         tdTask.style.textDecoration = 'line-through';
         const tdStatus = tr.querySelector('.status');
         tdStatus.textContent = 'Выполнена';
+
+        // Сохраняем статус строки в localStorage
+        const task = tdTask.textContent;
+        const updatedData = getStorage('tasks').map(item => {
+          if (item.task === task) {
+            return {...item, status: 'Выполнена'};
+          }
+          return item;
+        });
+        localStorage.setItem('tasks', JSON.stringify(updatedData));
       }
     });
   };
@@ -298,6 +308,20 @@ const removeStorage = (key, task) => {
       form,
     } = renderToDo(app, title);
     renderTasks(list, data);
+
+    // Проверяем статус строки из localStorage и задаем соответствующий стиль
+//     data.forEach(item => {
+//       if (item.status === 'Выполнена') {
+
+//         tr.classList.remove('table-light');
+//         tr.classList.add('table-success');
+//         const tdTask = tr.querySelector('.task');
+//         tdTask.style.textDecoration = 'line-through';
+//         const tdStatus = tr.querySelector('.status');
+//         tdStatus.textContent = 'Выполнена';
+//       }
+// });
+
     // Функционал
     taskControl(list);
     formControl(form, list);
