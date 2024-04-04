@@ -25,6 +25,10 @@ const removeStorage = (key, task) => {
   localStorage.setItem(key, JSON.stringify(updatedData));
 };
 
+const updateLocalStorage = (arr) => {
+  localStorage.setItem('tasks', JSON.stringify(arr));
+};
+
 
 {
   // const data = getStorage('tasks');
@@ -292,10 +296,12 @@ const removeStorage = (key, task) => {
           }
           return item;
         });
-        localStorage.setItem('tasks', JSON.stringify(updatedData));
+        updateLocalStorage(updatedData);
       }
     });
   };
+
+
 
   // Ф-я принимает селектор приложения с html страницы и заголовок
   const init = (selectorApp, title) => {
@@ -309,23 +315,24 @@ const removeStorage = (key, task) => {
     } = renderToDo(app, title);
     renderTasks(list, data);
 
-    // Проверяем статус строки из localStorage и задаем соответствующий стиль
-//     data.forEach(item => {
-//       if (item.status === 'Выполнена') {
-
-//         tr.classList.remove('table-light');
-//         tr.classList.add('table-success');
-//         const tdTask = tr.querySelector('.task');
-//         tdTask.style.textDecoration = 'line-through';
-//         const tdStatus = tr.querySelector('.status');
-//         tdStatus.textContent = 'Выполнена';
-//       }
-// });
-
     // Функционал
     taskControl(list);
     formControl(form, list);
     updateRowNumbers();
+
+    data.forEach(item => {
+      if (item.status === 'Выполнена') {
+        const tr = list.querySelector(`tr`);
+        tr.classList.remove('table-light');
+        tr.classList.add('table-success');
+        const tdTask = tr.querySelector('.task');
+        tdTask.style.textDecoration = 'line-through';
+        const tdStatus = tr.querySelector('.status');
+        tdStatus.textContent = 'Выполнена';
+      }
+    });
+    // Обновляем данные в localStorage после обновления статусов всех задач
+    updateLocalStorage(data);
   };
 
   window.toDoInit = init;
