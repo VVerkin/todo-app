@@ -35,18 +35,6 @@ export const data = [];
     taskControl(list);
     formControl(form, list);
     updateRowNumbers();
-
-    data.forEach(item => {
-      if (item.status === 'Выполнена') {
-        const tr = list.querySelector(`tr`);
-        tr.classList.remove('table-light');
-        tr.classList.add('table-success');
-        const tdTask = tr.querySelector('.task');
-        tdTask.style.textDecoration = 'line-through';
-        const tdStatus = tr.querySelector('.status');
-        tdStatus.textContent = 'Выполнена';
-      }
-    });
     // Обновляем данные в localStorage после обновления статусов всех задач
     updateLocalStorage(data);
   };

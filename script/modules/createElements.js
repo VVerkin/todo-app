@@ -107,38 +107,33 @@ const createTable = () => {
     tbody,
   };
 };
-
-const createRow = ({task}) => {
+// Ф-я создает строку
+const createRow = (task) => {
   const tr = document.createElement('tr');
-  tr.classList.add('table-light');
 
-  // tr.insertAdjacentHTML('afterbegin', `
-  // <td class='task-id'>${id}</td>
-  // <td class='task'>${task}</td>
-  // <td class='stat'>${stat}</td>
-  // <td class='btns'>
-  //     <button class="btn btn-danger me-3">
-  //     Удалить
-  //     </button>
-  //     <button class="btn btn-success">
-  //     Завершить  
-  //     </button>
-  // </td>
-  // `);
   const tdIndex = document.createElement('td');
   tdIndex.textContent = data.length;
 
   const tdTask = document.createElement('td');
   tdTask.classList.add('task');
-  tdTask.textContent = task;
-
+  tdTask.textContent = task.task;
 
   const tdStatus = document.createElement('td');
   tdStatus.classList.add('status');
   tdStatus.textContent = 'В процессе';
 
+
+  // Проверяем статус задачи и применяем соответствующие стили к строке
+  if (task.status === 'Выполнена') {
+    tr.classList.add('table-success');
+    tdTask.style.textDecoration = 'line-through';
+    tdStatus.textContent = 'Выполнена';
+  } else {
+    tr.classList.add('table-light');
+  }
+  // Создаем ячейку для кнопок
   const tdAction = document.createElement('td');
-  // Добавляем кнопки
+  // Создаем кнопки
   const rowButton = createButtonsGroup([
     {
       className: 'btn btn-danger me-3',
@@ -152,9 +147,9 @@ const createRow = ({task}) => {
     },
 
   ]);
-
+  // Добавляем кнопки
   tdAction.append(...rowButton.btns);
-
+  // Добавляем ячейки в строку
   tr.append(tdIndex, tdTask, tdStatus, tdAction);
 
   return tr;
