@@ -5,7 +5,7 @@ const createLogo = title => {
 // Создаем в верстке эл-т h3
   const h3 = document.createElement('h3');
   // Добавляем содержимое в заголовок
-  h3.textContent = `${title}`;
+  h3.textContent = 'ToDo list';
   // Возвращаем получившийся заголовок
   return h3;
 };
@@ -112,7 +112,7 @@ const createRow = (task) => {
   const tr = document.createElement('tr');
 
   const tdIndex = document.createElement('td');
-  tdIndex.textContent = data.length;
+  tdIndex.textContent = data.length + 1;
 
   const tdTask = document.createElement('td');
   tdTask.classList.add('task');

@@ -8,9 +8,9 @@
   <script type = "module" src="script/script.js"></script>
   <script>
     // Воспользуемся событием, чтобы запустить скрипт после загрузки страницы
-      document.addEventListener('DOMContentLoaded', () => {
-        //Ф-ии передаем класс контейнера и заголовок
-        toDoInit('.app-container', 'Todo App');
+      document.addEventListener('DOMContentLoaded', (userName) => {
+        //Ф-ии передаем класс контейнера и key
+        toDoInit('.app-container', userName);
       })
     </script>
   <title>ToDo</title>

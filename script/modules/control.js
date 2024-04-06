@@ -5,6 +5,7 @@ import createElements from './createElements.js';
 import {data} from '../script.js';
 
 const {
+  userName,
   getStorage,
   setStorage,
   removeStorage,
@@ -49,7 +50,7 @@ export const formControl = (form, list) => {
     addItemData(newTask);
     addItemTable(newTask, list);
     form.reset();
-    setStorage('tasks', newTask);
+    setStorage(userName, newTask);
   });
 };
     
@@ -73,7 +74,7 @@ export const taskControl = (list) => {
         // и удаляем этот объект из массива с помощью метода "splice"
         // data.splice(data.findIndex((item) => item.task === task), 1);
         // из localstorage
-      removeStorage('tasks', task);
+      removeStorage(userName, task);
         // Удаляем строку таблицы из DOM
       tr.remove();
       // Выводим в консоль получившийся массив после удаления строк
@@ -90,7 +91,7 @@ export const taskControl = (list) => {
 
       // Сохраняем статус строки в localStorage
       const task = tdTask.textContent;
-      const updatedData = getStorage('tasks').map(item => {
+      const updatedData = getStorage(userName).map(item => {
         if (item.task === task) {
           return {...item, status: 'Выполнена'};
         }

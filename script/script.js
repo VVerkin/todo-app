@@ -6,6 +6,7 @@ import {renderToDo, renderTasks} from './modules/render.js';
 
 
 const {
+  userName,
   getStorage,
   updateLocalStorage,
 } = serviceStorage;
@@ -24,7 +25,8 @@ export const data = [];
     // Получаем элемент по селектору
     const app = document.querySelector(selectorApp);
     // Деструктуризация list, что бы передавать отдельно, а не toDo.list
-    const data = getStorage('tasks');
+    // Получаем данные из localStorage
+    const data = getStorage(userName);
     const {
       list,
       form,

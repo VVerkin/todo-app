@@ -1,4 +1,6 @@
 
+const userName = prompt('Введите ваше имя');
+
 const getStorage = (key) => {
   // Запрос данных из localStore по ключу и распарсивание полученного объекта
   const localData = JSON.parse(localStorage.getItem(key));
@@ -14,20 +16,21 @@ const setStorage = (key, obj) => {
   // Добавляем данные (объект) в массив
   newData.push(obj);
   // Отправляем данные в localStorage
-  localStorage.setItem('tasks', JSON.stringify(newData));
+  localStorage.setItem(userName, JSON.stringify(newData));
 };
 
 const removeStorage = (key, task) => {
   const existingData = getStorage(key);
   const updatedData = existingData.filter(item => item.task !== task);
-  localStorage.setItem(key, JSON.stringify(updatedData));
+  localStorage.setItem(userName, JSON.stringify(updatedData));
 };
 
 const updateLocalStorage = (arr) => {
-  localStorage.setItem('tasks', JSON.stringify(arr));
+  localStorage.setItem(userName, JSON.stringify(arr));
 };
 
 export default {
+  userName,
   getStorage,
   setStorage,
   removeStorage,
