@@ -33,8 +33,6 @@ export const data = [];
       form,
     } = renderToDo(app, title);
     renderTasks(list, data);
-
-    // Функционал
     activeSubmit();
     taskControl(list);
     formControl(form, list);

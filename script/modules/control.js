@@ -16,12 +16,12 @@ const {
   createRow,
 } = createElements;
 
-
+// Ф-я добавляет элемент в массив
 export const addItemData = item => {
   data.push(item);
   console.log('data', data);
 };
-
+// Ф-я обновляет номер задачи
 export const updateRowNumbers = () => {
   const rows = document.querySelectorAll('tbody tr');
   rows.forEach((row, index) => {
@@ -47,23 +47,19 @@ export const activeSubmit = () => {
   });
 };
 
-// Ф-я принимает contact и list и добавляет contact в list
+// Ф-я и добавляет строку с задачей в таблицу
 export const addItemTable = (item, list) => {
-  // добавляет contact в list  с применением ф-и createRow, которая на основе объекта делает строку
   list.append(createRow(item));
 };
-
+// Ф-я управляет элементами формы
 export const formControl = (form, list) => {
-  // Получаем форму
   form.addEventListener('submit', e => {
-    // Убираем стандартное поведение формы
     e.preventDefault();
     // Реализуем отправку данных
     // Создаем formData и передаем туда форму через e.target
     const formData = new FormData(e.target);
     // Создаем объект на основе данных, введенных в поля формы
     const newTask = Object.fromEntries(formData);
-    console.log('newTask:', newTask);
     addItemData(newTask);
     addItemTable(newTask, list);
     form.reset();
@@ -74,34 +70,24 @@ export const formControl = (form, list) => {
     activeSubmit();
   });
 };
-    
-// Ф-я при помощи делегирования удаляет строкку при нажатии
-// на иконку "удалить"и эл-т из массива
+
+// Ф-я при помощи делегирования удаляет строкку из таблицы при нажатии
+// на иконку "удалить" и удаляет эл-т из массива
 export const taskControl = (list) => {
   // Вещшаем обработчик события на tbody
   list.addEventListener('click', e => {
     // Получаем эл-т на котором произошел клик
     const target = e.target;
-    // Проверяем, является ли ближайший родительский эл-т с классом 
-    // "cms__table-btn-del" кнопкой удаления товара
-    // В переменную получаем строку таблицы
+    // Проверяем, является ли ближайший родительский эл-т
+    // кнопкой удаления задачи
     const tr = target.closest('tr');
-
     if (target.closest('.btn-danger')) {
       const task = target.closest('tr').querySelector('.task').textContent;
-        // Получаем содержимое элемента "id" из строки
-        // Находим индекс объекта в массиве "goods",
-        // у которого значение свойства "id" совпадает с id товара
-        // и удаляем этот объект из массива с помощью метода "splice"
-        // data.splice(data.findIndex((item) => item.task === task), 1);
-        // из localstorage
       removeStorage(userName, task);
-        // Удаляем строку таблицы из DOM
       tr.remove();
-      // Выводим в консоль получившийся массив после удаления строк
       updateRowNumbers();
-      console.log(data);
     }
+    // Устанавливаем стили при нажатии на кнопку завершить
     if (target.closest('.btn-success')) {
       tr.classList.remove('table-light');
       tr.classList.add('table-success');

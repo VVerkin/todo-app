@@ -5,7 +5,7 @@ const createLogo = title => {
 // Создаем в верстке эл-т h3
   const h3 = document.createElement('h3');
   // Добавляем содержимое в заголовок
-  h3.textContent = 'ToDo list';
+  h3.textContent = 'Todo app';
   // Возвращаем получившийся заголовок
   return h3;
 };
@@ -45,7 +45,7 @@ const createForm = () => {
   const form = document.createElement('form');
   // Добавляем классы
   form.classList.add('d-flex', 'align-items-center', 'mb-3');
-  // Форма статичная, поэтому просто вставляем верстку
+  // Вставляем input в верстку
   form.insertAdjacentHTML('beforeend', `
 <label class="form-group me-3 mb-0">
     <input type="text" name="task" class="form-control" placeholder="ввести задачу" required>
@@ -112,7 +112,7 @@ const createRow = (task) => {
   const tr = document.createElement('tr');
 
   const tdIndex = document.createElement('td');
-  tdIndex.textContent = data.length + 1;
+  tdIndex.textContent = data.length;
 
   const tdTask = document.createElement('td');
   tdTask.classList.add('task');
