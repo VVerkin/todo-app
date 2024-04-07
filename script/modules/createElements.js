@@ -1,4 +1,10 @@
-import {data} from '../script.js';
+// import {data} from '../script.js';
+import serviceStorage from './serviceStorage.js';
+
+const {
+  userName,
+  getStorage,
+} = serviceStorage;
 
 // Ф-я принимает заголовок и добавляет его в качестве заголовка
 const createLogo = title => {
@@ -112,7 +118,8 @@ const createRow = (task) => {
   const tr = document.createElement('tr');
 
   const tdIndex = document.createElement('td');
-  tdIndex.textContent = data.length;
+  const data = getStorage(userName);
+  tdIndex.textContent = data.length + 1;
 
   const tdTask = document.createElement('td');
   tdTask.classList.add('task');
