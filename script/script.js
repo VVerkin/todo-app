@@ -12,6 +12,7 @@ const {
 } = serviceStorage;
 
 const {
+  activeSubmit,
   updateRowNumbers,
   formControl,
   taskControl,
@@ -34,6 +35,7 @@ export const data = [];
     renderTasks(list, data);
 
     // Функционал
+    activeSubmit();
     taskControl(list);
     formControl(form, list);
     updateRowNumbers();

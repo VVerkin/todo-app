@@ -17,7 +17,6 @@ const {
 } = createElements;
 
 
-
 export const addItemData = item => {
   data.push(item);
   console.log('data', data);
@@ -27,6 +26,24 @@ export const updateRowNumbers = () => {
   const rows = document.querySelectorAll('tbody tr');
   rows.forEach((row, index) => {
     row.querySelector('td:first-child').textContent = index + 1;
+  });
+};
+// Ф-я активирует кнопку "Добавить", если инпут не пустой
+export const activeSubmit = () => {
+  const formInput = document.querySelector('input');
+  const btnSubmit = document.querySelector('.btn-primary');
+  const btnReset = document.querySelector('.btn-warning');
+  btnSubmit.disabled = true;
+  btnReset.disabled = true;
+  formInput.addEventListener('input', () => {
+    // Проверка на пустое значение
+    if (formInput.value.trim() === '') {
+      btnSubmit.disabled = true;
+      btnReset.disabled = true;
+    } else {
+      btnSubmit.disabled = false;
+      btnReset.disabled = false;
+    }
   });
 };
 
@@ -50,7 +67,11 @@ export const formControl = (form, list) => {
     addItemData(newTask);
     addItemTable(newTask, list);
     form.reset();
+    activeSubmit();
     setStorage(userName, newTask);
+  });
+  form.addEventListener('reset', () => {
+    activeSubmit();
   });
 };
     
