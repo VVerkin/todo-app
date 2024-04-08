@@ -89,22 +89,40 @@ export const taskControl = (list) => {
     }
     // Устанавливаем стили при нажатии на кнопку завершить
     if (target.closest('.btn-success')) {
-      tr.classList.remove('table-light');
-      tr.classList.add('table-success');
-      const tdTask = tr.querySelector('.task');
-      tdTask.style.textDecoration = 'line-through';
-      const tdStatus = tr.querySelector('.status');
-      tdStatus.textContent = 'Выполнена';
+      if (tr.classList.contains('table-light')) {
+        tr.classList.remove('table-light');
+        tr.classList.add('table-success');
+        const tdTask = tr.querySelector('.task');
+        tdTask.style.textDecoration = 'line-through';
+        const tdStatus = tr.querySelector('.status');
+        tdStatus.textContent = 'Выполнена';
 
-      // Сохраняем статус строки в localStorage
-      const task = tdTask.textContent;
-      const updatedData = getStorage(userName).map(item => {
-        if (item.task === task) {
-          return {...item, status: 'Выполнена'};
-        }
-        return item;
-      });
-      updateLocalStorage(updatedData);
+        // Сохраняем статус строки в localStorage
+        const task = tdTask.textContent;
+        const updatedData = getStorage(userName).map(item => {
+          if (item.task === task) {
+            return {...item, status: 'Выполнена'};
+          }
+          return item;
+        });
+        updateLocalStorage(updatedData);
+      } else {
+        tr.classList.remove('table-success');
+        tr.classList.add('table-light');
+        const tdTask = tr.querySelector('.task');
+        tdTask.style.textDecoration = 'none';
+        const tdStatus = tr.querySelector('.status');
+        tdStatus.textContent = 'В процессе';
+        // Сохраняем статус строки в localStorage
+        const task = tdTask.textContent;
+        const updatedData = getStorage(userName).map(item => {
+          if (item.task === task) {
+            return {...item, status: 'В процессе'};
+          }
+          return item;
+        });
+        updateLocalStorage(updatedData);
+      }
     }
   });
 };
