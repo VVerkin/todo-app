@@ -90,8 +90,9 @@ export const taskControl = (list) => {
     // Устанавливаем стили при нажатии на кнопку завершить
     if (target.closest('.btn-success')) {
       if (tr.classList.contains('table-light')) {
-        tr.classList.remove('table-light');
-        tr.classList.add('table-success');
+        // tr.classList.remove('table-light');
+        // tr.classList.add('table-success');
+        tr.className = ('table-success');
         const tdTask = tr.querySelector('.task');
         tdTask.style.textDecoration = 'line-through';
         const tdStatus = tr.querySelector('.status');
@@ -107,8 +108,9 @@ export const taskControl = (list) => {
         });
         updateLocalStorage(updatedData);
       } else {
-        tr.classList.remove('table-success');
-        tr.classList.add('table-light');
+        tr.className = ('table-light');
+        // tr.classList.remove('table-success');
+        // tr.classList.add('table-light');
         const tdTask = tr.querySelector('.task');
         tdTask.style.textDecoration = 'none';
         const tdStatus = tr.querySelector('.status');
